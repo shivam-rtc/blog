@@ -5,7 +5,7 @@ const postController = {
   createPost: async (req, res) => {
     try {
       const { title, content, tags, status } = req.body;
-      const author = req.user.id; // Assuming user ID is set in req.user from auth middleware
+      const author = req.user.id;
 
       if (!title || !content) {
         return res

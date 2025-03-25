@@ -1,13 +1,16 @@
 import { FaSearch, FaShoppingCart, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
+import { logout } from "../app/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
 
 const Header = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { token } = useSelector((state: RootState) => state.auth);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>()
 
   return (
     <header className="bg-white shadow-md">
@@ -38,7 +41,7 @@ const Header = () => {
             className="text-gray-600 hover:text-gray-900 cursor-pointer"
             size={24}
           />
-          {!isAuthenticated ? (
+          {!token ? (
             <>
               <Link
                 to="/login"
@@ -77,7 +80,7 @@ const Header = () => {
                   </Link>
                   <button
                     onClick={() => {
-                      logout(); // Call logout function
+                      dispatch(logout()); // Call logout function
                       setDropdownOpen(false);
                       navigate("/")
                     }}

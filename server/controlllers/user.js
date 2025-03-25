@@ -3,6 +3,29 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userController = {
+  googleLogin: async (req, res) => {
+    try {
+      console.log("google login");
+      const user = req.user;
+      console.log("user",user)
+      if (!user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+
+      res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+      // res.status(200).json({ message: "Login successful",user, token });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Something went wrong",
+        error: error.message,
+      });
+    }
+  },
+
   signup: async (req, res) => {
     try {
       const { name, email, password } = req.body;
@@ -23,17 +46,23 @@ const userController = {
       });
 
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-      res.status(201).json({ message: "User registered successfully", token }); 
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+      res.status(201).json({ message: "User registered successfully", token });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Something went wrong", error: error.message });
     }
   },
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
       if (!email || !password) {
-        return res.status(400).json({ message: "Email and password are required." });
+        return res
+          .status(400)
+          .json({ message: "Email and password are required." });
       }
 
       const user = await User.findOne({ email });
@@ -47,10 +76,14 @@ const userController = {
       if (!matchPassword) {
         return res.status(400).json({ message: "Invalid email or password." });
       }
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
       res.status(200).json({ message: "Login successful", token });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Something went wrong", error: error.message });
     }
   },
   users: async (req, res) => {
