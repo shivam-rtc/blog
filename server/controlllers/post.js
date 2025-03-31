@@ -4,9 +4,9 @@ const postController = {
   // Create a new post=> Done
   createPost: async (req, res) => {
     try {
-      const { title, content, tags, status } = req.body;
+      const { title, content, category, status } = req.body;
       const author = req.user.id;
-
+      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
       if (!title || !content) {
         return res
           .status(400)
@@ -17,8 +17,9 @@ const postController = {
         title,
         content,
         author,
-        tags,
+        category,
         status,
+        image: imageUrl,
       });
 
       await newPost.save();
@@ -71,7 +72,7 @@ const postController = {
   updatePost: async (req, res) => {
     try {
       const { id } = req.params;
-      const { title, content, tags, status } = req.body;
+      const { title, content, category, status } = req.body;
       const userId = req.user.id;
 
       const post = await Post.findById(id);
@@ -86,7 +87,7 @@ const postController = {
 
       post.title = title || post.title;
       post.content = content || post.content;
-      post.tags = tags || post.tags;
+      post.category = category || post.category;
       post.status = status || post.status;
 
       await post.save();

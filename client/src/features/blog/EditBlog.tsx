@@ -1,44 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { allPosts } from "../../app/slices/blogSlice";
+import { AppDispatch } from "../../app/store";
+import { RootState } from "../../app/store";
 
 const EditBlog = () => {
-  const { postId } = useParams();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  // const { postId } = useParams();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { posts } = useSelector((state: RootState) => state.blog);
 
   useEffect(() => {
-    // Fetch post data by postId (Mocked)
-    setTitle("Existing Post Title");
-    setContent("Existing Post Content");
-  }, [postId]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Updated Post:", { postId, title, content });
-  };
-
+    dispatch(allPosts());
+  }, []);
+console.log("first", posts)
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Edit Post</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 w-full"
-        />
-        <textarea
-          placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="border p-2 w-full"
-        />
-        <button type="submit" className="bg-green-500 text-white px-4 py-2">
-          Save Changes
-        </button>
-      </form>
-    </div>
+    <div className="overflow-x-auto">
+    <table className="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr className="bg-gray-100">
+          <th className="px-6 py-3 border text-left text-gray-600">Title</th>
+          <th className="px-6 py-3 border text-left text-gray-600">Author</th>
+          <th className="px-6 py-3 border text-left text-gray-600">Created</th>
+          <th className="px-6 py-3 border text-left text-gray-600">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {posts?.map((post) => (
+          <tr key={post._id} className="border-b">
+            <td className="px-6 py-3">{post.title}</td>
+            <td className="px-6 py-3">{post.author.name}</td>
+            <td className="px-6 py-3">{post.createdAt}</td>
+            <td className="px-6 py-3">
+              <Link to="" className="text-blue-600 mr-3">
+                Edit
+              </Link>
+              <button className="text-red-600">Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
   );
 };
 

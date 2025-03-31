@@ -1,18 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../services/axiosInstance";
 
-const API_URL = "http://localhost:4000/api/createPost";
-
 interface Post {
-  _id?: string;
+  _id: any;
+  createdAt: string | number | Date;
+  comments: any;
+  author: string;
+  id?: string;
   title: string;
   content: string;
-  tags: string[];
+  category: string[];
   status: "draft" | "published" | string;
+  image: string;
 }
 
 interface BlogState {
   posts: Post[];
+  postDetail: Post | null;
   loading: boolean;
   error: string | null;
 }
@@ -20,6 +24,7 @@ interface BlogState {
 // Initial state
 const initialState: BlogState = {
   posts: [],
+  postDetail: null,
   loading: false,
   error: null,
 };
@@ -27,12 +32,12 @@ const initialState: BlogState = {
 // Async thunk to create a new post
 export const createPost = createAsyncThunk(
   "blog/createPost",
-  async (postData: Post, { rejectWithValue }) => {
+  async (postData: FormData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axiosInstance.post(API_URL, postData, {
+      const response = await axiosInstance.post("createPost", postData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
@@ -40,6 +45,42 @@ export const createPost = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to create post"
+      );
+    }
+  }
+);
+
+export const allPosts = createAsyncThunk(
+  "blog/allPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.get("posts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch posts"
+      );
+    }
+  }
+);
+
+export const getPostById = createAsyncThunk(
+  "blog/getPostById",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.get(`post/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data.post;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch post details"
       );
     }
   }
@@ -60,6 +101,30 @@ const blogSlice = createSlice({
         state.posts.push(action.payload.post);
       })
       .addCase(createPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(allPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(allPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload.posts;
+      })
+      .addCase(allPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getPostById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getPostById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postDetail = action.payload;
+      })
+      .addCase(getPostById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -16,7 +16,7 @@ const postSchema = new mongoose.Schema(
       ref: "User", // Refers to User model
       required: true,
     },
-    tags: {
+    category: {
       type: [String], // Array of tags
       default: [],
     },
@@ -33,6 +33,9 @@ const postSchema = new mongoose.Schema(
       enum: ["draft", "published"], // Only allow these values
       default: "draft",
     },
+    image:{
+      type: String,
+    }
   },
   { timestamps: true } // Automatically adds createdAt and updatedAt
 );

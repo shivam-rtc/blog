@@ -7,7 +7,7 @@ const userController = {
     try {
       console.log("google login");
       const user = req.user;
-      console.log("user",user)
+      console.log("user", user);
       if (!user) {
         return res.status(401).json({ message: "Not authenticated" });
       }
@@ -17,7 +17,6 @@ const userController = {
       });
 
       res.redirect(`http://localhost:5173/dashboard?token=${token}`);
-      // res.status(200).json({ message: "Login successful",user, token });
     } catch (error) {
       return res.status(500).json({
         message: "Something went wrong",
@@ -57,8 +56,10 @@ const userController = {
     }
   },
   login: async (req, res) => {
+    console.log("logged in");
     try {
       const { email, password } = req.body;
+      console.log("email", email);
       if (!email || !password) {
         return res
           .status(400)

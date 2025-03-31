@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
 // Import pages
@@ -32,7 +31,7 @@ const AppRoutes = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/course/:id" element={<BlogDetails />} />
+        <Route path="/details/:id" element={<BlogDetails />} />
       </Route>
       {/* Private Routes */}
       <Route element={<PrivateRoutes />}>

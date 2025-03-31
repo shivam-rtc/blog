@@ -6,8 +6,7 @@ import Signup from "./Signup";
 import { store } from "../../app/store";
 
 describe("Signup Component", () => {
-  
-  test("renders Signup form correctly", () => { 
+  test("renders Signup form correctly", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
@@ -22,7 +21,6 @@ describe("Signup Component", () => {
     expect(screen.getByText("Signup")).toBeInTheDocument();
   });
 
-  
   test("updates input values when typing", async () => {
     render(
       <Provider store={store}>
@@ -31,21 +29,21 @@ describe("Signup Component", () => {
         </BrowserRouter>
       </Provider>
     );
-  
+
     // Test name input
     const nameInput = screen.getByTestId("btn1");
     fireEvent.change(nameInput, { target: { value: "John Doe" } });
     expect(nameInput).toHaveValue("John Doe");
-  
+
     // Test email input with invalid format
     const emailInput = screen.getByPlaceholderText("user@gmail.com");
     fireEvent.change(emailInput, { target: { value: "johndoeexample" } });
     expect(emailInput).toHaveValue("johndoeexample");
-  
+
     // Click the signup button to trigger validation
     const signupButton = screen.getByRole("button", { name: "Signup" });
     fireEvent.click(signupButton);
-  
+
     expect(emailInput).toBeInvalid();
   });
 

@@ -10,7 +10,7 @@ const Header = () => {
   const { token } = useSelector((state: RootState) => state.auth);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <header className="bg-white shadow-md">
@@ -37,10 +37,6 @@ const Header = () => {
             />
           </div>
 
-          <FaShoppingCart
-            className="text-gray-600 hover:text-gray-900 cursor-pointer"
-            size={24}
-          />
           {!token ? (
             <>
               <Link
@@ -82,7 +78,7 @@ const Header = () => {
                     onClick={() => {
                       dispatch(logout()); // Call logout function
                       setDropdownOpen(false);
-                      navigate("/")
+                      navigate("/");
                     }}
                     className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
                   >

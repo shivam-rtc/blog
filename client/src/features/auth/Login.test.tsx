@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "../../app/store";
 describe("login component", () => {
   test("render login", () => {
-    //rndering component
+    //rendering component
     render(
       <Provider store={store}>
         <MemoryRouter>

@@ -5,6 +5,7 @@ import { login } from "../../app/slices/authSlice";
 import { AppDispatch } from "../../app/store";
 import { googleLogin } from "../../app/slices/authSlice";
 import { FaGoogle } from "react-icons/fa";
+import Alert from "../../components/Alert";
 const Login = () => {
   const [user, setUser] = React.useState({ email: "", password: "" });
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Login = () => {
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(login(user));
+    <Alert title="login successfully" type="success"/>
     navigate("/");
   };
 
