@@ -1,9 +1,9 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import { describe, expect, test, vi } from "vitest";
-import Signup from "./Signup";
-import { store } from "../../app/store";
+import Signup from "../features/auth/Signup";
+import { store } from "../app/store";
 
 describe("Signup Component", () => {
   test("renders Signup form correctly", () => {

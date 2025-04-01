@@ -19,7 +19,7 @@ const Login = () => {
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(login(user));
-    <Alert title="login successfully" type="success"/>
+    // <Alert title="login successfully" type="success"/>
     navigate("/");
   };
 

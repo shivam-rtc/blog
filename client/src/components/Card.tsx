@@ -14,11 +14,12 @@ interface courseProps {
 
 const Card: React.FC<courseProps> = ({ course }) => {
   return (
-    <div className="h-[350px] relative max-w-sm  bg-white border border-gray-200 rounded-sm shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    <div data-testid="card-wrap" className="h-[350px] relative max-w-sm  bg-white border border-gray-200 rounded-sm shadow-sm dark:bg-gray-800 dark:border-gray-700">
       <img
         className="w-full rounded-sm"
         src={`http://localhost:4000/${course?.image?.replace("/uploads", "")}`}
         alt=""
+        role="img"
       />
       <div className="p-2">
         <h5 className="mb-1 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
@@ -30,6 +31,7 @@ const Card: React.FC<courseProps> = ({ course }) => {
         </p>
         <div className="">
           <Link
+            role="link"
             to={`/details/${course._id}`}
             className="absolute bottom-1 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >

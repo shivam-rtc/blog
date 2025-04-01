@@ -28,9 +28,25 @@ app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+  console.log(`Incoming Request: ${req.method} ${req.url}`);
+  next();
+});
+
+
 // use routes
 app.use("/api", userRouter);
 app.use("/api", postRouter);
-app.listen(PORT, (req, res) => {
-  console.log(`server is running on ${PORT}`);
-});
+
+// app.listen(PORT, (req, res) => {
+//   console.log(`server is running on ${PORT}`);
+// });
+
+// Start the server only if not in test mode
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`);
+  });
+}
+
+module.exports = app;
