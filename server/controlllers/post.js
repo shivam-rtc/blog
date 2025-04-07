@@ -68,6 +68,25 @@ const postController = {
     }
   },
 
+  // Get posts created by the logged-in user
+getUserPosts: async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const posts = await Post.find({ author: userId })
+      .populate("author", "name email")
+      .sort({ createdAt: -1 });
+
+    res
+      .status(200)
+      .json({ message: "User's posts retrieved successfully", posts });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch user's posts", error: error.message });
+  }
+},
+
+
   // Update a post (Only author can update)
   updatePost: async (req, res) => {
     try {
@@ -79,6 +98,9 @@ const postController = {
       if (!post) return res.status(404).json({ message: "Post not found" });
 
       // Check if logged-in user is the author
+      console.log("post.author.toString()",post.author.toString());
+      console.log("userId", userId);
+
       if (post.author.toString() !== userId) {
         return res
           .status(403)

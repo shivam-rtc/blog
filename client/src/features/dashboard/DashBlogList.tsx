@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { allPosts, deletePost } from "../../app/slices/blogSlice";
+import { userPosts, deletePost } from "../../app/slices/blogSlice";
 import { AppDispatch } from "../../app/store";
 import { RootState } from "../../app/store";
 
@@ -12,7 +12,7 @@ const DashBlogList = () => {
   const { posts, loading } = useSelector((state: RootState) => state.blog);
 
   useEffect(() => {
-    dispatch(allPosts());
+    dispatch(userPosts());
   }, []);
 
   const handleDelete = (id: string) => {

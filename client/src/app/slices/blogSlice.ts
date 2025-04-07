@@ -86,6 +86,24 @@ export const getPostById = createAsyncThunk(
   }
 );
 
+// user post
+export const userPosts = createAsyncThunk(
+  "blog/userPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.get("/user/posts/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data.posts;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch your posts"
+      );
+    }
+  }
+);
+
 // Async thunk to update a post
 export const updatePost = createAsyncThunk(
   "blog/updatePost",
@@ -171,6 +189,18 @@ const blogSlice = createSlice({
         state.postDetail = action.payload;
       })
       .addCase(getPostById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(userPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(userPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+      .addCase(userPosts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
