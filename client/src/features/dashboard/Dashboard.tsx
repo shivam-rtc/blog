@@ -18,7 +18,7 @@ const Dashboard = () => {
           </Link>
         </li>
         <li>
-          <Link to="/dashboard/edit-post/1" className="text-blue-500">
+          <Link to="/lists" className="text-blue-500">
             ✏️ Edit an Existing Post
           </Link>
         </li>

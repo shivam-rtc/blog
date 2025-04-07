@@ -7,11 +7,14 @@ import { AppDispatch, RootState } from "../../app/store";
 
 const BlogList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { posts } = useSelector((state: RootState) => state.blog);
+
+  const { posts, loading } = useSelector((state: RootState) => state.blog);
 console.log("first", posts)
   useEffect(() => {
     dispatch(allPosts());
   }, []);
+  
+ 
   return (
     <>
       <div className="containe place-items-center mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4">

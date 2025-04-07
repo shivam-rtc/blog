@@ -25,7 +25,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="mb-2">
-            <Link to="/dashboard/edit-post/1" className="hover:text-gray-400">
+            <Link to="lists" className="hover:text-gray-400">
               Posts
             </Link>
           </li>

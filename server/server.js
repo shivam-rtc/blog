@@ -6,7 +6,7 @@ const cors = require("cors");
 const passport = require("passport");
 const session = require("express-session");
 const morgan = require("morgan");
-const winston = require("winston")
+const winston = require("winston");
 //db
 require("./db");
 
@@ -28,14 +28,20 @@ const logger = winston.createLogger({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(morgan("dev"));
-app.use(morgan("combined", { stream: { write: (message) => logger.info(message.trim()) } }));
-app.use(express.static("uploads"))
-// app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.use(cors({
-  origin: "http://localhost:5173", // Allow frontend URL
-  credentials: true, // Allow cookies
-  methods: "GET,POST,PUT,DELETE",
-}));
+app.use(
+  morgan("combined", {
+    stream: { write: (message) => logger.info(message.trim()) },
+  })
+);
+// allow to access file
+app.use(express.static("uploads"));
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow frontend URL
+    credentials: true, // Allow cookies
+    methods: "GET,POST,PUT,DELETE",
+  })
+);
 app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -44,7 +50,6 @@ app.use((req, res, next) => {
   console.log(`Incoming Request: ${req.method} ${req.url}`);
   next();
 });
-
 
 // use routes
 app.use("/api", userRouter);

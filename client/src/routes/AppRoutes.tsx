@@ -14,11 +14,12 @@ import { useAuth } from "../contexts/AuthContext";
 // Dashboard Pages
 import Dashboard from "../features/dashboard/Dashboard";
 import CreateBlog from "../features/blog/CreateBlog";
-import EditBlog from "../features/blog/EditBlog";
+import DashBlogList from "../features/dashboard/DashBlogList";
 
 // Layouts
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
+import EditPost from "../features/dashboard/EditPost";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -39,7 +40,8 @@ const AppRoutes = () => {
           <Route index element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
           <Route path="create-post" element={<CreateBlog />} />
-          <Route path="edit-post/:postId" element={<EditBlog />} />
+          <Route path="lists" element={<DashBlogList />} />
+          <Route path="edit/:id" element={<EditPost />} />
         </Route>
       </Route>
       {/* 404 Not Found */}

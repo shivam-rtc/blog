@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { allPosts } from "../../app/slices/blogSlice";
+import { allPosts, deletePost } from "../../app/slices/blogSlice";
 import { AppDispatch } from "../../app/store";
 import { RootState } from "../../app/store";
 
-const EditBlog = () => {
+const DashBlogList = () => {
   // const { postId } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { posts } = useSelector((state: RootState) => state.blog);
+  const { posts, loading } = useSelector((state: RootState) => state.blog);
 
   useEffect(() => {
     dispatch(allPosts());
   }, []);
+
+  const handleDelete = (id: string) => {
+    if (confirm("Are you sure you want to delete this post?")) {
+      dispatch(deletePost(id));
+    }
+  };
+
 console.log("first", posts)
   return (
     <div className="overflow-x-auto">
@@ -33,10 +40,12 @@ console.log("first", posts)
             <td className="px-6 py-3">{post.author.name}</td>
             <td className="px-6 py-3">{post.createdAt}</td>
             <td className="px-6 py-3">
-              <Link to="" className="text-blue-600 mr-3">
+              <Link
+              to={`/dashboard/edit/${post._id}`}
+               className="text-blue-600 mr-3">
                 Edit
               </Link>
-              <button className="text-red-600">Delete</button>
+                <button onClick={()=> handleDelete(post._id)} className="text-red-600">Delete</button>
             </td>
           </tr>
         ))}
@@ -46,4 +55,4 @@ console.log("first", posts)
   );
 };
 
-export default EditBlog;
+export default DashBlogList;

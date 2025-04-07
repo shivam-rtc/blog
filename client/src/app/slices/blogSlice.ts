@@ -86,6 +86,52 @@ export const getPostById = createAsyncThunk(
   }
 );
 
+// Async thunk to update a post
+export const updatePost = createAsyncThunk(
+  "blog/updatePost",
+  async (
+    { id, updatedData }: { id: string; updatedData: any },
+    { rejectWithValue }
+  ) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.put(
+        `/updatePost/${id}`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.updatedPost;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update post"
+      );
+    }
+  }
+);
+
+//  delete a post
+export const deletePost = createAsyncThunk(
+  "blog/deletePost",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.delete(`/deletePost/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("delete response", response.data);
+      return { id };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete post"
+      );
+    }
+  }
+);
+
 const blogSlice = createSlice({
   name: "blog",
   initialState: initialState,
@@ -125,6 +171,37 @@ const blogSlice = createSlice({
         state.postDetail = action.payload;
       })
       .addCase(getPostById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deletePost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = state.posts.filter(
+          (post) => post._id !== action.payload.id
+        );
+      })
+      .addCase(deletePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updatePost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.posts.findIndex(
+          (post) => post._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.posts[index] = action.payload;
+        }
+      })
+      .addCase(updatePost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
