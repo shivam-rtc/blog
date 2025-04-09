@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
 import { getPostById } from "../../app/slices/blogSlice";
+import Comments from "./Comments";
+import { setComments } from "../../app/slices/commentsSlice";
+import ReactMarkdown from "react-markdown";
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -17,8 +20,11 @@ const BlogDetails = () => {
     }
   }, [id, dispatch]);
 
-  console.log("postSetail", postDetail);
-  console.log("id", id);
+  React.useEffect(() => {
+    if (postDetail?.comments) {
+      dispatch(setComments(postDetail.comments));
+    }
+  }, [postDetail, dispatch]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -49,11 +55,36 @@ const BlogDetails = () => {
             />
           )}
 
-          <p className="mt-6 text-gray-700 leading-relaxed">
-            {postDetail.content}
-          </p>
+          <div className="mt-6 prose prose-lg max-w-none text-gray-800">
+            <ReactMarkdown
+              components={{
+                h1: ({ node, ...props }) => (
+                  <h1 className="text-4xl font-bold my-4" {...props} />
+                ),
+                p: ({ node, ...props }) => (
+                  <p className="text-lg leading-7 my-2" {...props} />
+                ),
+                a: ({ node, ...props }) => (
+                  <a className="text-blue-600 underline" {...props} />
+                ),
+                code: ({ node, inline, className, children, ...props }) => (
+                  <code
+                    className={`bg-gray-100 px-1 rounded ${
+                      inline ? "" : "block p-2"
+                    }`}
+                    {...props}
+                  >
+                    {children}
+                  </code>
+                ),
+              }}
+            >
+              {postDetail.content}
+            </ReactMarkdown>
+          </div>
+          <Comments postId={postDetail._id} />
 
-          <div className="mt-8">
+          {/* <div className="mt-8">
             <h2 className="text-2xl font-semibold text-gray-900">Comments</h2>
             <div className="mt-4">
               {postDetail?.comments.length > 0 ? (
@@ -67,7 +98,7 @@ const BlogDetails = () => {
                 <p className="text-gray-500">No comments yet.</p>
               )}
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </div>

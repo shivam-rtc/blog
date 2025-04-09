@@ -51,10 +51,9 @@ const postController = {
   // Get a single post by ID
   getPostById: async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id).populate(
-        "author",
-        "name email"
-      );
+      const post = await Post.findById(req.params.id)
+      .populate("author", "name email")
+      .populate("comments.user", "name");
       if (!post) return res.status(404).json({ message: "Post not found" });
 
       // return success(res, post, "Post retrived successfully")
@@ -66,6 +65,7 @@ const postController = {
         .json({ message: "Failed to fetch post", error: error.message });
     }
   },
+  
 
   // Get posts created by the logged-in user
   getUserPosts: async (req, res) => {
@@ -189,8 +189,10 @@ const postController = {
       if (!post) return res.status(404).json({ message: "Post not found" });
       // Fetch user details (name)
       const user = await User.findById(userId).select("name");
-      post.comments.push({ user: user, text, createdAt: new Date() });
+      post.comments.push({ user: userId, text, createdAt: new Date() });
       await post.save();
+      // Now populate after saving
+      await post.populate("comments.user", "name");
 
       res.status(201).json({
         message: "Comment added successfully",

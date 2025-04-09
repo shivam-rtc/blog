@@ -4,7 +4,6 @@ import { RootState } from "../app/store";
 const PrivateRoutes = () => {
   const { token } = useSelector((state: RootState) => state.auth);
 
-console.log("private token",token);
   return token ? <Outlet /> : <Navigate to="/login" />;
 };
 

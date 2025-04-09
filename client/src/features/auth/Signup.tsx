@@ -27,11 +27,8 @@ const Signup = () => {
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(signup(user));
-    // signin(user.email);
     Navigate("/");
   };
-
-  console.log("reduxtoken", token);
 
   return (
     <div className="">

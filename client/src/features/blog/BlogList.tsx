@@ -9,12 +9,10 @@ const BlogList = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { posts, loading } = useSelector((state: RootState) => state.blog);
-console.log("first", posts)
   useEffect(() => {
     dispatch(allPosts());
   }, []);
-  
- console.log("postes",posts)
+
   return (
     <>
       <div className="containe place-items-center mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4">

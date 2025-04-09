@@ -21,37 +21,46 @@ const DashBlogList = () => {
     }
   };
 
-console.log("first", posts)
   return (
     <div className="overflow-x-auto">
-    <table className="min-w-full bg-white border border-gray-200">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="px-6 py-3 border text-left text-gray-600">Title</th>
-          <th className="px-6 py-3 border text-left text-gray-600">Author</th>
-          <th className="px-6 py-3 border text-left text-gray-600">Created</th>
-          <th className="px-6 py-3 border text-left text-gray-600">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {posts?.map((post) => (
-          <tr key={post._id} className="border-b">
-            <td className="px-6 py-3">{post.title}</td>
-            <td className="px-6 py-3">{post.author.name}</td>
-            <td className="px-6 py-3">{post.createdAt}</td>
-            <td className="px-6 py-3">
-              <Link
-              to={`/dashboard/edit/${post._id}`}
-               className="text-blue-600 mr-3">
-                Edit
-              </Link>
-                <button onClick={()=> handleDelete(post._id)} className="text-red-600">Delete</button>
-            </td>
+      <table className="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="px-6 py-3 border text-left text-gray-600">Title</th>
+            <th className="px-6 py-3 border text-left text-gray-600">Author</th>
+            <th className="px-6 py-3 border text-left text-gray-600">
+              Created
+            </th>
+            <th className="px-6 py-3 border text-left text-gray-600">
+              Actions
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          {posts?.map((post) => (
+            <tr key={post._id} className="border-b">
+              <td className="px-6 py-3">{post.title}</td>
+              <td className="px-6 py-3">{post.author.name}</td>
+              <td className="px-6 py-3">{post.createdAt}</td>
+              <td className="px-6 py-3">
+                <Link
+                  to={`/dashboard/edit/${post._id}`}
+                  className="text-blue-600 mr-3"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => handleDelete(post._id)}
+                  className="text-red-600"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

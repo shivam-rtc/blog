@@ -24,7 +24,6 @@ const CreateBlog = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("contents", title, content, category);
     e.preventDefault();
     if (!title || !content) {
       return;

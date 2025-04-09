@@ -26,7 +26,6 @@ export const signup = createAsyncThunk(
         email,
         password,
       });
-      console.log("response", response.data);
       localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
@@ -44,8 +43,6 @@ export const login = createAsyncThunk(
   ) => {
     try {
       const response = await axiosInstance.post("/login", { email, password });
-      console.log("slices", email);
-      console.log("login response", response);
       localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {

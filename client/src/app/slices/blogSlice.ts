@@ -140,7 +140,6 @@ export const deletePost = createAsyncThunk(
       const response = await axiosInstance.delete(`/deletePost/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("delete response", response.data);
       return { id };
     } catch (error) {
       return rejectWithValue(

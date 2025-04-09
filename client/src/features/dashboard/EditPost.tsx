@@ -12,8 +12,8 @@ const EditBlog = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { postDetail, loading, error } = useSelector(
-     (state: RootState) => state.blog
-   );
+    (state: RootState) => state.blog
+  );
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -35,8 +35,6 @@ const EditBlog = () => {
     }
   }, [postDetail]);
 
-  console.log("postDetail",postDetail);
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setImage(e.target.files[0]);
@@ -45,7 +43,6 @@ const EditBlog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("updated")
     // if (!title || !content || !selectedCategory) return;
 
     const formData = new FormData();
