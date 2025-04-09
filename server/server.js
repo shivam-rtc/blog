@@ -13,6 +13,7 @@ require("./db");
 //imports routes
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
+const errorHandler = require("./middlewares/errorHandler");
 
 //port
 const PORT = process.env.PORT || 5000;
@@ -54,6 +55,7 @@ app.use((req, res, next) => {
 // use routes
 app.use("/api", userRouter);
 app.use("/api", postRouter);
+app.use(errorHandler);
 
 app.listen(PORT, (req, res) => {
   console.log(`server is running on ${PORT}`);

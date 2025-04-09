@@ -1,5 +1,8 @@
 const Post = require("../models/post");
 const User = require("../models/user");
+const { success, error } = require("../utils/apiResponse");
+const ApiError = require("../utils/apiError");
+
 const postController = {
   // Create a new post=> Done
   createPost: async (req, res) => {
@@ -8,9 +11,7 @@ const postController = {
       const author = req.user.id;
       const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
       if (!title || !content) {
-        return res
-          .status(400)
-          .json({ message: "Title and content are required." });
+        return error(res, "Title and content are required", 404);
       }
 
       const newPost = new Post({
@@ -23,13 +24,9 @@ const postController = {
       });
 
       await newPost.save();
-      res
-        .status(201)
-        .json({ message: "Post created successfully", post: newPost });
+      return success(res, newPost, "Post created successfully", 201);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Something went wrong", error: error.message });
+      return new ApiError("Failed to create post", 500);
     }
   },
 
@@ -42,7 +39,7 @@ const postController = {
         .skip((page - 1) * limit)
         .limit(Number(limit))
         .sort({ createdAt: -1 });
-
+      // return success(res, posts, "Posts retrieved successfully", 200);
       res.status(200).json({ message: "Posts retrieved successfully", posts });
     } catch (error) {
       res
@@ -60,8 +57,10 @@ const postController = {
       );
       if (!post) return res.status(404).json({ message: "Post not found" });
 
+      // return success(res, post, "Post retrived successfully")
       res.status(200).json({ message: "Post retrieved successfully", post });
     } catch (error) {
+      // error(res, "failed to fetch post", 400)
       res
         .status(500)
         .json({ message: "Failed to fetch post", error: error.message });
@@ -69,23 +68,23 @@ const postController = {
   },
 
   // Get posts created by the logged-in user
-getUserPosts: async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const posts = await Post.find({ author: userId })
-      .populate("author", "name email")
-      .sort({ createdAt: -1 });
+  getUserPosts: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const posts = await Post.find({ author: userId })
+        .populate("author", "name email")
+        .sort({ createdAt: -1 });
 
-    res
-      .status(200)
-      .json({ message: "User's posts retrieved successfully", posts });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch user's posts", error: error.message });
-  }
-},
-
+      res
+        .status(200)
+        .json({ message: "User's posts retrieved successfully", posts });
+    } catch (error) {
+      res.status(500).json({
+        message: "Failed to fetch user's posts",
+        error: error.message,
+      });
+    }
+  },
 
   // Update a post (Only author can update)
   updatePost: async (req, res) => {
@@ -98,7 +97,7 @@ getUserPosts: async (req, res) => {
       if (!post) return res.status(404).json({ message: "Post not found" });
 
       // Check if logged-in user is the author
-      console.log("post.author.toString()",post.author.toString());
+      console.log("post.author.toString()", post.author.toString());
       console.log("userId", userId);
 
       if (post.author.toString() !== userId) {

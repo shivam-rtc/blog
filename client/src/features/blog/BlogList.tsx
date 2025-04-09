@@ -14,14 +14,14 @@ console.log("first", posts)
     dispatch(allPosts());
   }, []);
   
- 
+ console.log("postes",posts)
   return (
     <>
       <div className="containe place-items-center mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4">
         {posts
           ? posts?.map((content) => (
               <Link to={`/details/${content._id}`}>
-                <Card key={content._id} course={content} />{" "}
+                <Card key={content._id} course={content} />
               </Link>
             ))
           : "not found"}
